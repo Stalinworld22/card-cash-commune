@@ -65,7 +65,7 @@ const MoneyShowerOverlay = ({ players, totalPool, onClose }: MoneyShowerOverlayP
                   <span className="font-semibold">{player.name}</span>
                   <span className="text-sm text-muted-foreground">({player.totalScore})</span>
                 </div>
-                <span className="font-bold text-success">₹{share.toFixed(2)}</span>
+                <span className="font-bold text-success">₹{share.toFixed(4)}</span>
               </div>
             );
           })}
