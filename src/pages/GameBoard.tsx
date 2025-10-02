@@ -34,6 +34,7 @@ const GameBoard = () => {
   
   const [showRejoinDialog, setShowRejoinDialog] = useState(false);
   const [rejoinPlayerId, setRejoinPlayerId] = useState('');
+  const [rejoinShufflerPosition, setRejoinShufflerPosition] = useState<number>(0);
   
   const [showFinishDialog, setShowFinishDialog] = useState(false);
   
@@ -185,14 +186,17 @@ const GameBoard = () => {
   };
 
   const handleRejoin = (playerId: string) => {
+    if (!gameState) return;
+    const activePlayers = gameState.players.filter(p => p.status === 'active');
     setRejoinPlayerId(playerId);
+    setRejoinShufflerPosition(activePlayers.length);
     setShowRejoinDialog(true);
   };
 
   const confirmRejoin = () => {
     if (!gameState || !rejoinPlayerId) return;
 
-    const updatedGameState = rejoinPlayer(gameState, rejoinPlayerId);
+    const updatedGameState = rejoinPlayer(gameState, rejoinPlayerId, rejoinShufflerPosition);
     saveGameState(updatedGameState);
     setGameState(updatedGameState);
     setShowRejoinDialog(false);
@@ -201,7 +205,7 @@ const GameBoard = () => {
     const player = gameState.players.find(p => p.id === rejoinPlayerId);
     toast({
       title: "Player Rejoined",
-      description: `${player?.name} has rejoined the game.`,
+      description: `${player?.name} has rejoined the game at position ${rejoinShufflerPosition + 1}.`,
     });
   };
 
@@ -380,7 +384,7 @@ const GameBoard = () => {
           <DialogHeader>
             <DialogTitle>Round {gameState.rounds.length + 1}</DialogTitle>
             <DialogDescription>
-              Shuffler: {gameState.players.find(p => p.id === currentShufflerId)?.name}
+              Shuffler: {gameState.players.find(p => p.id === currentShufflerId)?.name || 'Unknown'}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 max-h-[60vh] overflow-y-auto">
@@ -450,20 +454,42 @@ const GameBoard = () => {
       </AlertDialog>
 
       {/* Rejoin Confirmation */}
-      <AlertDialog open={showRejoinDialog} onOpenChange={setShowRejoinDialog}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Rejoin Game?</AlertDialogTitle>
-            <AlertDialogDescription>
+      <Dialog open={showRejoinDialog} onOpenChange={setShowRejoinDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Rejoin Game</DialogTitle>
+            <DialogDescription>
               {playerToRejoin?.name} will rejoin with an entry fee of ₹{gameState.amountPerPlayer}.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmRejoin}>Confirm Rejoin</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="shufflerPosition">Shuffler Position</Label>
+              <select
+                id="shufflerPosition"
+                value={rejoinShufflerPosition}
+                onChange={(e) => setRejoinShufflerPosition(Number(e.target.value))}
+                className="w-full mt-1 px-3 py-2 border border-input bg-background rounded-md"
+              >
+                {gameState.players
+                  .filter(p => p.status === 'active')
+                  .map((_, index) => (
+                    <option key={index} value={index}>
+                      Position {index + 1}
+                    </option>
+                  ))}
+                <option value={gameState.players.filter(p => p.status === 'active').length}>
+                  Position {gameState.players.filter(p => p.status === 'active').length + 1} (Last)
+                </option>
+              </select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowRejoinDialog(false)}>Cancel</Button>
+            <Button onClick={confirmRejoin}>Confirm Rejoin</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Finish Game Confirmation */}
       <AlertDialog open={showFinishDialog} onOpenChange={setShowFinishDialog}>

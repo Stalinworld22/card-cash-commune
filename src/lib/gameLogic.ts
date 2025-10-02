@@ -133,19 +133,34 @@ export const withdrawPlayer = (
 
 export const rejoinPlayer = (
   gameState: GameState,
-  playerId: string
+  playerId: string,
+  position: number
 ): GameState => {
   const activePlayers = gameState.players.filter(p => p.status === 'active');
   const maxScore = activePlayers.length > 0 
     ? Math.max(...activePlayers.map(p => p.totalScore))
     : 0;
 
-  const updatedPlayers = gameState.players.map(p =>
-    p.id === playerId 
-      ? { ...p, status: 'active' as PlayerStatus, totalScore: maxScore }
-      : p
-  );
+  const rejoiningPlayer = gameState.players.find(p => p.id === playerId);
+  if (!rejoiningPlayer) return gameState;
 
+  const updatedRejoiningPlayer = {
+    ...rejoiningPlayer,
+    status: 'active' as PlayerStatus,
+    totalScore: maxScore
+  };
+
+  const otherPlayers = gameState.players.filter(p => p.id !== playerId);
+  const activeOthers = otherPlayers.filter(p => p.status === 'active');
+  const inactiveOthers = otherPlayers.filter(p => p.status !== 'active');
+
+  const reorderedActivePlayers = [
+    ...activeOthers.slice(0, position),
+    updatedRejoiningPlayer,
+    ...activeOthers.slice(position)
+  ];
+
+  const updatedPlayers = [...reorderedActivePlayers, ...inactiveOthers];
   const playersWithShares = calculateShares(updatedPlayers);
 
   return {

@@ -34,14 +34,17 @@ const PlayerCard = ({ player, totalPool, isWinning }: PlayerCardProps) => {
       
       <div className="flex justify-between items-end">
         <div>
-          <p className="text-sm text-muted-foreground">Score</p>
+          <p className="text-sm text-muted-foreground">Points</p>
           <p className="text-2xl font-bold text-primary">{player.totalScore}</p>
         </div>
         
         {player.status === 'active' && (
           <div className="text-right">
-            <p className="text-sm text-muted-foreground">Current Share</p>
+            <p className="text-sm text-muted-foreground">Share</p>
             <p className="text-xl font-bold text-success">₹{shareAmount.toFixed(2)}</p>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              {(player.currentShare * 100).toFixed(1)}%
+            </p>
           </div>
         )}
       </div>
