@@ -54,7 +54,7 @@ const MoneyShowerOverlay = ({ players, totalPool, onClose }: MoneyShowerOverlayP
 
         <div className="space-y-3 mb-6">
           {sortedPlayers.map((player, index) => {
-            const share = player.currentShare * totalPool;
+            const share = Math.round((player.currentShare * totalPool) / 10) * 10;
             return (
               <div 
                 key={player.id}
@@ -65,7 +65,7 @@ const MoneyShowerOverlay = ({ players, totalPool, onClose }: MoneyShowerOverlayP
                   <span className="font-semibold">{player.name}</span>
                   <span className="text-sm text-muted-foreground">({player.totalScore})</span>
                 </div>
-                <span className="font-bold text-success">₹{share.toFixed(4)}</span>
+                <span className="font-bold text-success">₹{share}</span>
               </div>
             );
           })}
