@@ -41,7 +41,10 @@ const PlayerCard = ({ player, totalPool, isWinning }: PlayerCardProps) => {
         {player.status === 'active' && (
           <div className="text-right">
             <p className="text-sm text-muted-foreground">Share</p>
-            <p className="text-xl font-bold text-success">₹{shareAmount}</p>
+            <p className="text-xl font-bold text-success flex items-center justify-end gap-1">
+              <span className="animate-coin-spin">💰</span>
+              ₹{shareAmount}
+            </p>
             <p className="text-xs text-muted-foreground mt-0.5">
               {(player.currentShare * 100).toFixed(1)}%
             </p>

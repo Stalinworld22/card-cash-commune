@@ -303,7 +303,11 @@ const GameBoard = () => {
       </div>
 
       {/* Player Cards */}
-      <div className="max-w-2xl mx-auto p-4 space-y-3 animate-fade-in">
+      <div className="max-w-2xl mx-auto p-4 space-y-3 animate-fade-in relative">
+        {/* Decorative Cards */}
+        <div className="absolute -top-4 -left-2 text-3xl opacity-20 animate-card-float">🂡</div>
+        <div className="absolute top-1/3 -right-2 text-2xl opacity-20 animate-card-float" style={{ animationDelay: '1s' }}>🃁</div>
+        
         {gameState.players.map(player => (
           <div key={player.id} className="relative">
             <PlayerCard
@@ -347,7 +351,7 @@ const GameBoard = () => {
               onClick={handleOpenAddRound}
               className="bg-primary text-primary-foreground font-semibold h-12"
             >
-              Add Round
+              🎴 Add Round
             </Button>
             <Button
               onClick={handleUndo}
@@ -382,9 +386,13 @@ const GameBoard = () => {
       <Dialog open={showAddRound} onOpenChange={setShowAddRound}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>Round {gameState.rounds.length + 1}</DialogTitle>
-            <DialogDescription>
-              Shuffler: {gameState.players.find(p => p.id === currentShufflerId)?.name || 'Unknown'}
+            <DialogTitle className="flex items-center gap-2">
+              <span className="animate-card-shuffle text-2xl">🎴</span>
+              Round {gameState.rounds.length + 1}
+            </DialogTitle>
+            <DialogDescription className="flex items-center gap-2">
+              <span className="font-semibold">🃏 Shuffler:</span> 
+              {gameState.players.find(p => p.id === currentShufflerId)?.name || 'Unknown'}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 max-h-[60vh] overflow-y-auto">

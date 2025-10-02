@@ -91,6 +91,23 @@ export default {
           "0%": { transform: "translateY(-100%) rotate(0deg)", opacity: "1" },
           "100%": { transform: "translateY(100vh) rotate(360deg)", opacity: "0" },
         },
+        "card-float": {
+          "0%, 100%": { transform: "translateY(0px) rotate(-5deg)" },
+          "50%": { transform: "translateY(-20px) rotate(5deg)" },
+        },
+        "card-shuffle": {
+          "0%": { transform: "translateX(0) rotate(0deg)", opacity: "1" },
+          "50%": { transform: "translateX(-100px) rotate(-15deg)", opacity: "0.5" },
+          "100%": { transform: "translateX(0) rotate(0deg)", opacity: "1" },
+        },
+        "coin-spin": {
+          "0%": { transform: "rotateY(0deg)" },
+          "100%": { transform: "rotateY(360deg)" },
+        },
+        "pulse-glow": {
+          "0%, 100%": { opacity: "1", transform: "scale(1)" },
+          "50%": { opacity: "0.8", transform: "scale(1.05)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -99,6 +116,10 @@ export default {
         "slide-up": "slide-up 0.3s ease-out",
         "confetti": "confetti 3s ease-out forwards",
         "money-fall": "money-fall 2s ease-out forwards",
+        "card-float": "card-float 6s ease-in-out infinite",
+        "card-shuffle": "card-shuffle 1s ease-in-out",
+        "coin-spin": "coin-spin 2s ease-in-out infinite",
+        "pulse-glow": "pulse-glow 2s ease-in-out infinite",
       },
     },
   },
